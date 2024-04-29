@@ -1,0 +1,100 @@
+﻿@model DetailCrud.Models.Applicant
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+
+<h4>Applicant</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create" asp-controller="Applicants" method="post" enctype="multipart/form-data">
+            @Html.ValidationSummary()
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Date" class="control-label"></label>
+                <input asp-for="Date" class="form-control" />
+                <span asp-validation-for="Date" class="text-danger"></span>
+            </div>
+            @*  <div class="form-group">
+            <label asp-for="TotalEx" class="control-label"></label>
+            <input asp-for="TotalEx" class="form-control" />
+            <span asp-validation-for="TotalEx" class="text-danger"></span>
+            </div> *@
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="IsAvailable" /> @Html.DisplayNameFor(model => model.IsAvailable)
+                </label>
+            </div>
+            
+            <div class="form-group">
+                <label asp-for="Picture" class="control-label"></label>
+                <input type="file" asp-for="Picture" id="BrowsePhoto" name="Picture" accept="/images*" class="form-control" />
+                @*<span asp-validation-for="PicPath" class="text-danger"></span>*@
+                <div>
+                    <img src="#" id="ImageDiv" class="img-thumbnail" style="height:auto; width:100px" />
+                </div>
+
+            <table class="table">
+                <thead>
+                    <tr>
+                        <td>Company Name</td>
+                        <td>Designation</td>
+                        <td>YearofEx</td>
+                        <td><input type="submit" value="ADD" name="btn" class="btn btn-success" /></td>
+                    </tr>
+                </thead>
+                <tbody>
+                    @for (int i = 0; i < Model.ApplicantExes.Count; i++)
+                    {
+                        <tr>
+                            <td><input asp-for="ApplicantExes[i].CompanyName" class="form-control-lg" /></td>
+                            <td><input asp-for="ApplicantExes[i].Designation" class="form-control-lg" /></td>
+                            <td><input asp-for="ApplicantExes[i].YearofEx" class="form-control-lg" /></td>
+                            <td><input type="button" class="btn btn-danger" id="btnDelete" value="Delete" onclick="Remove(this)" /></td>
+                            @* <td>@Html.EditorFor(model => Model.Students[i].StudentName, new { htmlAttributes = new { @class = "form-control" } })</td>
+                        <td>@Html.EditorFor(model => Model.Students[i].Address, new { htmlAttributes = new { @class = "form-control" } })</td> *@
+                            @*  <td><input type="button" class="btn btn-danger" value="Delete" onclick="Remove(this)" /></td> *@
+                        </tr>
+                    }
+                </tbody>
+            </table>
+
+            <div class="form-group mt-3">
+                <input type="submit" value="Create" name="btn" class="btn btn-primary" />
+                <a asp-action="Index" class="btn btn-danger">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    @*   <a asp-action="Index" class="btn btn-danger">Cancel</a> *@
+
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script>
+        function Remove(e) {
+            e.closest("tr").remove();
+        }
+
+
+        $(document).ready(function () {
+            $("#BrowsePhoto").change(function (e) {
+                ImageDiv.src = URL.createObjectURL(e.target.files[0])
+            })
+        })
+
+    </script>
+}
